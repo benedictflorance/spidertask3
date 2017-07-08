@@ -147,6 +147,9 @@ button{
 .space{
   margin: 2vh 0 2vh 0;
 }
+.spacehorizontal{
+  margin: 0 3vw 0 3vw !important;
+}
 .box {
   width:70%;
   background-image: url("img/divbg2.jpg");

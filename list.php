@@ -39,7 +39,12 @@ if(isset($_SESSION['username'])&&!empty($_SESSION['username']))
   </script></head><a href =\"logout.php\" id=\"button\" class=\"red left\">Logout</a><a href =\"dashboard.php\" id=\"button\" class=\"red right\">Dashboard</a>
   <h1><span style=\"color:black\"</span>trip<span style=\"color:white\"</span>advisor &copy</h1>
   <h5>An online travel diary</h5>
-  <h1 class=\"space\">Your Journals</h1><p class=\"error\"></p>";
+  <h1 class=\"space\">Your Journals</h1><p class=\"error\"></p><br><form action=\"";echo htmlentities($_SERVER["PHP_SELF"]);echo "\" method=\"post\"><input type=\"submit\" id=\"button\" class=\"green spacehorizontal\" name=\"vote\" value=\"Sort by Votes\"/><span><input type=\"submit\" id=\"button\" class=\"green spacehorizontal\" name=\"date\" value=\"Sort by date\"/></span></form>";
+  if(isset($_POST['vote']))
+    $query=$conn->prepare("SELECT * FROM journals WHERE username= ? ORDER BY vote DESC");
+  else if(isset($_POST['date']))
+    $query=$conn->prepare("SELECT * FROM journals WHERE username= ? ORDER BY date DESC");
+  else
   $query=$conn->prepare("SELECT * FROM journals WHERE username= ?");
   $query->bind_param("s",$username);
   $query->execute();

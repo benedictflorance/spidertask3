@@ -46,11 +46,16 @@ if(isset($_SESSION['username'])&&!empty($_SESSION['username'])&&$flag)
   </head><a href =\"logout.php\" id=\"button\" class=\"red left\">Logout</a><a href =\"dashboard.php\" id=\"button\" class=\"red right\">Dashboard</a>
   <h1><span style=\"color:black\"</span>trip<span style=\"color:white\"</span>advisor &copy</h1>
   <h5>An online travel diary</h5>
-  <h1 class=\"space\">Journals In and Around</h1><p class=\"error\"></p>";
+  <h1 class=\"space\">Journals In and Around</h1><p class=\"error\"></p><br><form action=\"";echo htmlentities($_SERVER["PHP_SELF"])."?lat=".$lat."&lng=".$lng;echo "\" method=\"post\"><input type=\"submit\" id=\"button\" class=\"green spacehorizontal\" name=\"vote\" value=\"Sort by Votes\"/><span><input type=\"submit\" id=\"button\" class=\"green spacehorizontal\" name=\"date\" value=\"Sort by date\"/></span></form>";
   $latlow=$lat-1.5;
   $lathigh=$lat+1.5;
   $lnglow=$lng-1.5;
   $lnghigh=$lng+1.5;
+  if(isset($_POST['vote']))
+  $query=$conn->prepare("SELECT * FROM journals WHERE (lat BETWEEN ? AND ?) AND (lng BETWEEN ? AND ?) ORDER BY vote DESC");
+  else if(isset($_POST['date']))
+  $query=$conn->prepare("SELECT * FROM journals WHERE (lat BETWEEN ? AND ?) AND (lng BETWEEN ? AND ?) ORDER BY date DESC");
+  else
   $query=$conn->prepare("SELECT * FROM journals WHERE (lat BETWEEN ? AND ?) AND (lng BETWEEN ? AND ?)");
   $query->bind_param("dddd",$latlow,$lathigh,$lnglow,$lnghigh);
   $query->execute();
