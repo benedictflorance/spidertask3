@@ -199,3 +199,9 @@ button{
   right: 10px;
   left: auto;
 }
+.nolikes{
+  font-weight: bold !important;
+  font-family: 'Open Sans', sans-serif !important;
+  margin-left: 3px;
+  font-size:30px;
+}

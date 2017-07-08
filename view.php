@@ -6,7 +6,6 @@
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 	<link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
   <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
-</head>
 <?php
    ini_set('display_errors', 1); 
    ini_set('log_errors',1); 
@@ -24,10 +23,30 @@
 
 if(isset($_SESSION['username'])&&!empty($_SESSION['username'])&&$flag)
 {
-  echo "<a href =\"logout.php\" id=\"button\" class=\"red left\">Logout</a><a href =\"dashboard.php\" id=\"button\" class=\"red right\">Dashboard</a>
+  echo "<script>
+  function increasevotes(e,location,user,date,vote)
+  {
+    e.preventDefault();
+    var username='{$_SESSION['username']}';
+    var xmlhttp = new XMLHttpRequest();
+    if(user!=username){
+    xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+            e.target.parentNode.previousSibling.textContent=this.responseText;
+            }
+      document.getElementsByClassName('error')[0].textContent=\"\";
+        };
+    xmlhttp.open(\"GET\", \"vote.php?location=\" + location + \"&user=\"+ user +\"&date=\"+date+\"&vote=\"+vote, true);
+    xmlhttp.send();
+  }
+  else
+  document.getElementsByClassName('error')[0].textContent=\"You cannot upvote your own review\";
+  }
+  </script>
+  </head><a href =\"logout.php\" id=\"button\" class=\"red left\">Logout</a><a href =\"dashboard.php\" id=\"button\" class=\"red right\">Dashboard</a>
   <h1><span style=\"color:black\"</span>trip<span style=\"color:white\"</span>advisor &copy</h1>
   <h5>An online travel diary</h5>
-  <h1 class=\"space\">Journals In and Around</h1>";
+  <h1 class=\"space\">Journals In and Around</h1><p class=\"error\"></p>";
   $latlow=$lat-1.5;
   $lathigh=$lat+1.5;
   $lnglow=$lng-1.5;
@@ -40,7 +59,7 @@ if(isset($_SESSION['username'])&&!empty($_SESSION['username'])&&$flag)
   while($rows=mysqli_fetch_array($result))
   {
   if($rows['public']=="yes")
-  {echo "<div class=\"box\"><h2>{$rows['title']}<h2><h5>By {$rows['username']}</h5>";
+  {echo "<div class=\"box\"><span class=\"right nolikes\">{$rows['vote']}</span><a href=\"\" onclick=\"increasevotes(event,'{$rows['title']}','{$rows['username']}','{$rows['date']}','{$rows['vote']}')\"><img src=\"img/like.png\" class=\"right\" width=\"30\" height=\"30\"/></a><h2>{$rows['title']}<h2><h5>By {$rows['username']}</h5>";
   if(isset($rows['image'])&&!empty($rows['image']))
   {
   $location="uploads\\".$rows['image'];
